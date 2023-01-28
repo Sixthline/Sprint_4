@@ -9,8 +9,10 @@ import static org.junit.Assert.*;
 
 public class MainPage {
     private final WebDriver driver;
+    // Кнопка "Заказать"
+    private final By orderButton = By.xpath(".//button[@class='Button_Button__ra12g']");
     private final By accordionComponent = By.className("accordion");
-    private final By yesCookieButton = By.xpath("//*[@id='rcc-confirm-button']");
+    private final By acceptCookieButton = By.xpath("//*[@id='rcc-confirm-button']");
     private final String[] array = {
             "Сутки — 400 рублей. Оплата курьеру — наличными или картой.",
             "Пока что у нас так: один заказ — один самокат. " +
@@ -31,15 +33,19 @@ public class MainPage {
         this.driver = driver;
     }
 
-    // Скролим до аккордиона раздела «Вопросы о важном»
+    public void orderButtonClick(){
+        driver.findElement(orderButton).click();
+    }
+
+    // Скролим до аккордиона в разделе «Вопросы о важном»
     public void scrollToAccordionComponent() {
         WebElement element = driver.findElement(accordionComponent);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
     }
 
-    // Проверка текста при нажатии на стрелочку в выпадающем списке раздела «Вопросы о важном».
+    // Проверка текста выпадающего при нажатии на стрелочку элемента аккордеон.
     public void checkTextAccordionComponent() {
-        driver.findElement(yesCookieButton).click();
+        driver.findElement(acceptCookieButton).click();
         for (int i = 0; i < 8; i++) {
             By elementAccordionButton = By.xpath("//*[@id='accordion__heading-" + i + "']");
             driver.findElement(elementAccordionButton).click();
