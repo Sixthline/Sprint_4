@@ -4,54 +4,48 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import static org.junit.Assert.*;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class MainPage {
-    private final WebDriver driver;
+    // Кнопка "Самокат" (шапка страницы)
+    private final By scooterButton = By.xpath(".//img[@alt='Scooter']");
+    // Изображение самоката на главной странице сервиса
+    private final By scooterBlueprint = By.xpath(".//img[@alt='Scooter blueprint']");
     // Кнопка "Заказать"
     private final By orderButton = By.xpath(".//button[@class='Button_Button__ra12g']");
+    // Элемент аккордеон
     private final By accordionComponent = By.className("accordion");
+    // Кнопка Куки
     private final By acceptCookieButton = By.xpath("//*[@id='rcc-confirm-button']");
-    private final String[] array = {
-            "Сутки — 400 рублей. Оплата курьеру — наличными или картой.",
-            "Пока что у нас так: один заказ — один самокат. " +
-                    "Если хотите покататься с друзьями, можете просто сделать несколько заказов — один за другим.",
-            "Допустим, вы оформляете заказ на 8 мая. Мы привозим самокат 8 мая в течение дня. " +
-                    "Отсчёт времени аренды начинается с момента, когда вы оплатите заказ курьеру. " +
-                    "Если мы привезли самокат 8 мая в 20:30, суточная аренда закончится 9 мая в 20:30.",
-            "Только начиная с завтрашнего дня. Но скоро станем расторопнее.",
-            "Пока что нет! Но если что-то срочное — всегда можно позвонить в поддержку по красивому номеру 1010.",
-            "Самокат приезжает к вам с полной зарядкой. " +
-                    "Этого хватает на восемь суток — даже если будете кататься без передышек и во сне. " +
-                    "Зарядка не понадобится.",
-            "Да, пока самокат не привезли. Штрафа не будет, объяснительной записки тоже не попросим. Все же свои.",
-            "Да, обязательно. Всем самокатов! И Москве, и Московской области."
-    };
-
+    // Драйвер
+    private final WebDriver driver;
+    // Конструктор класса главной страницы
     public MainPage(WebDriver driver) {
         this.driver = driver;
     }
 
-    public void orderButtonClick(){
-        driver.findElement(orderButton).click();
+    // Ждем загрузки главной страницы
+    public void mainPageWait() {
+        new WebDriverWait(driver, 3)
+                .until(driver -> (driver.findElement(scooterBlueprint) != null
+                ));
     }
 
+    // Клик по кнопке "Заказать" (шапка страницы)
+    public void clickOrderButton() {
+        driver.findElement(orderButton).click();
+    }
+    // Клик по кнопке "Принять куки"
+    public void clickAcceptCookieButton(){
+        driver.findElement(acceptCookieButton).click();
+    }
+    // Клик по кнопке "Самокат" (шапка страницы)
+    public void clickScooterButton() {
+        driver.findElement(scooterButton).click();
+    }
     // Скролим до аккордиона в разделе «Вопросы о важном»
     public void scrollToAccordionComponent() {
         WebElement element = driver.findElement(accordionComponent);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
-    }
-
-    // Проверка текста выпадающего при нажатии на стрелочку элемента аккордеон.
-    public void checkTextAccordionComponent() {
-        driver.findElement(acceptCookieButton).click();
-        for (int i = 0; i < 8; i++) {
-            By elementAccordionButton = By.xpath("//*[@id='accordion__heading-" + i + "']");
-            driver.findElement(elementAccordionButton).click();
-            By descriptionElementAccordionButton = By.xpath("//*[@id='accordion__panel-" + i + "']/p");
-            String result = driver.findElement(descriptionElementAccordionButton).getText();
-            assertEquals("Комментарий на вкладке " + i + " не соответствует требованиям", array[i], result);
-        }
     }
 }
