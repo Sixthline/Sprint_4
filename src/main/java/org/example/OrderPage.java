@@ -117,4 +117,19 @@ public class OrderPage {
     public String getTextStatusOrder() {
         return driver.findElement(orderIsProcessed).getText();
     }
+
+    public void fillPersonalDataForm (String name, String surname, String address, String phoneNumber){
+        inputName(name);
+        inputSurname(surname);
+        inputAddress(address);
+        inputMetro();
+        inputPhoneNumber(phoneNumber);
+    }
+
+    public void fillDetailsOrderForm(String period, String color, String comment){
+        inputDate();
+        inputPeriod(period);
+        chooseColorScooter(color);
+        inputComment(comment);
+    }
 }
